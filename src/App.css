@@ -1,0 +1,94 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz@8..144&display=swap");
+.App {
+  margin-top: 10%;
+  text-align: center;
+  justify-content: center;
+}
+
+.commentary_border {
+  border: solid 2px #0095da;
+  padding: 2rem;
+  margin: 20px 5% 0 5%;
+  background-color: #ffffff;
+  border-radius: 10px;
+}
+
+.wrapper {
+  background: #ffffff;
+  border: solid 1px #dddddd;
+  border-radius: 10px;
+  margin: 20px 5% 0 5%;
+}
+
+.wrapper textarea {
+  width: 80%;
+
+  padding: 15px;
+  outline: none;
+  resize: none;
+  font-family: "Roboto Flex", sans-serif;
+  font-size: 16px;
+  margin: 20px 0 20px 0;
+  border-radius: 10px;
+}
+
+textarea:is(:focus) {
+  border-width: 2px;
+  padding: 14px;
+  border-color: #00db63;
+}
+
+textarea::-webkit-scrollbar {
+  width: 0;
+}
+
+.messages {
+  width: 100%;
+}
+
+@media only screen and (min-width: 600px) {
+  .commentary_border {
+    margin: 20px 20% 0 20%;
+  }
+  .wrapper {
+    margin: 20px 20% 0 20%;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .commentary_border {
+    margin: 20px 20% 0 20%;
+  }
+  .wrapper {
+    margin: 20px 20% 0 20%;
+  }
+}
+
+@media only screen and (min-width: 1400px) {
+  .commentary_border {
+    margin: 20px 25% 0 25%;
+  }
+  .wrapper {
+    margin: 20px 25% 0 25%;
+  }
+}
+
+.votes {
+  float: left;
+  margin: 0;
+}
+.vote {
+  float: left;
+  margin: 10px 0 0 10px;
+}
+
+.icons {
+  display: flex;
+  width: 100%;
+  margin-top: 10px;
+  float: left;
+}
+
+#icon:hover {
+  cursor: pointer;
+}
