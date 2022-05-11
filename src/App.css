@@ -7,7 +7,7 @@
 
 .commentary_border {
   border: solid 2px #0095da;
-  padding: 2rem;
+  padding: 1.5rem;
   margin: 20px 5% 0 5%;
   background-color: #ffffff;
   border-radius: 10px;
@@ -36,10 +36,6 @@ textarea:is(:focus) {
   border-width: 2px;
   padding: 14px;
   border-color: #00db63;
-}
-
-textarea::-webkit-scrollbar {
-  width: 0;
 }
 
 .messages {
@@ -74,21 +70,146 @@ textarea::-webkit-scrollbar {
 }
 
 .votes {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   float: left;
-  margin: 0;
 }
 .vote {
+  height: auto;
   float: left;
-  margin: 10px 0 0 10px;
+  margin: 0 0 0 0;
 }
 
 .icons {
   display: flex;
-  width: 100%;
-  margin-top: 10px;
+  align-items: center;
+  justify-content: center;
+  height: auto;
   float: left;
 }
 
 #icon:hover {
   cursor: pointer;
+}
+
+.modalBackground {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.507);
+}
+
+.modalContainer {
+  width: 60%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  height: 60%;
+  overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+  background: transparent;
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 100vw;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 100vw;
+}
+
+::-webkit-scrollbar-track-piece:end {
+  margin-bottom: 10px;
+}
+
+::-webkit-scrollbar-track-piece:start {
+  margin-top: 10px;
+}
+
+.card {
+  border: solid 2px black;
+  display: flex;
+  text-align: left;
+  justify-content: flex-start;
+}
+
+.leftside {
+  width: auto;
+  border: solid 2px black;
+  margin: 1px;
+}
+
+.rightside {
+  height: auto;
+  overflow: hidden;
+  white-space: initial;
+  word-wrap: break-word;
+  margin: 1px;
+  width: 95%;
+  border: solid 2px black;
+}
+
+.icons {
+  margin: 0 10px 5px 0;
+  height: 15px;
+  width: 20px;
+  float: right;
+}
+
+.reply textarea {
+  width: 80%;
+  height: 65px;
+  padding: 15px;
+  outline: none;
+  resize: none;
+  font-family: "Roboto Flex", sans-serif;
+  font-size: 16px;
+  margin: 20px 0 20px 0;
+  border-radius: 10px;
+}
+
+.reply textarea:is(:focus) {
+  border-width: 2px;
+  padding: 14px;
+  border-color: #3493ff;
+}
+
+.card {
+  margin: 10px;
+}
+
+.comment-sector {
+  position: relative;
+  height: auto;
+}
+
+.comment {
+  display: flex;
+  text-align: left;
+  width: auto;
+  border: solid 2px black;
+  margin: 10px;
+  overflow: hidden;
+  white-space: initial;
+  word-wrap: break-word;
+}
+
+.comment img {
+  display: flex;
+  height: 40px;
+  width: auto;
+  border: solid 2px black;
+  border-radius: 50px;
 }

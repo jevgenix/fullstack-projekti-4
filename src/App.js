@@ -1,77 +1,13 @@
 import "./App.css";
 import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faAngleUp,
-  faAngleDown,
-  faMessage,
-} from "@fortawesome/free-solid-svg-icons";
-
-const Message = ({ message }) => {
-  const [comments, setComment] = useState([]);
-  const [commentInput, setCommentInput] = useState("");
-  const [vote, setVote] = useState(0);
-
-  const messageCommentHandler = (event) => {
-    setCommentInput(event.target.value);
-  };
-
-  const commentMessageHandler = (event) => {
-    event.preventDefault();
-    setComment(comments.concat(commentInput));
-    setCommentInput("");
-  };
-
-  const handleVoteUp = () => {
-    setVote(vote + 1);
-  };
-
-  const handleVoteDown = () => {
-    setVote(vote - 1);
-  };
-
-  return (
-    <div className="commentary_border">
-      <div className="votes">
-        <FontAwesomeIcon
-          onClick={handleVoteUp}
-          value={vote}
-          id="icon"
-          icon={faAngleUp}
-        />
-        <br />
-        <FontAwesomeIcon
-          onClick={handleVoteDown}
-          value={vote}
-          id="icon"
-          icon={faAngleDown}
-        />
-      </div>
-      <h3 className="vote">{vote}</h3>
-      <div className="message">{message}</div>
-
-      {/* commentary */}
-      <div className="message_commentaries">
-        {comments.map((comment, index) => (
-          <p key={index}>{comment}</p>
-        ))}
-        <form onSubmit={commentMessageHandler}>
-          <input value={commentInput} onChange={messageCommentHandler}></input>
-        </form>
-        <div className="icons">
-          <FontAwesomeIcon id="icon" icon={faMessage} />
-        </div>
-      </div>
-    </div>
-  );
-};
+import Message from "./components/Message";
 
 function App() {
-  const [input, setInput] = useState("");
+  const [textarea, setTextarea] = useState("");
   const [message, setMessage] = useState([]);
 
-  const handleInputChange = (event) => {
-    setInput(event.target.value);
+  const handleTextareaChange = (event) => {
+    setTextarea(event.target.value);
     event.target.style.height = "auto";
     let scHeights = event.target.scrollHeight;
     event.target.style.height = `${scHeights}px`;
@@ -80,8 +16,8 @@ function App() {
   const handleSubmitForm = (event) => {
     if (event.which === 13 && event.shiftKey === false) {
       event.preventDefault();
-      setMessage(message.concat(input));
-      setInput("");
+      setMessage(message.concat(textarea));
+      setTextarea("");
     }
   };
 
@@ -92,12 +28,12 @@ function App() {
         <h3>Tell us something!</h3>
         <form onKeyDown={handleSubmitForm}>
           <textarea
-            value={input}
+            value={textarea}
             name="message"
             className="textarea"
             placeholder="Tell us something!"
             autoComplete="off"
-            onChange={handleInputChange}
+            onChange={handleTextareaChange}
           ></textarea>
         </form>
       </div>
