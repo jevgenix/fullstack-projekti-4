@@ -2,8 +2,13 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import SingleMessage from "./SingleMessage";
+import messageService from "../services/posts";
+
 const Commentaries = ({ closeCommentaries, message, vote, setVote }) => {
-  const [comments, setComment] = useState([]);
+  const commentaries = message[3].map((elem) => elem.comments);
+  const id = message[1];
+
+  const [comments, setComment] = useState(commentaries);
   const [commentTextarea, setCommentTextarea] = useState("");
 
   const messageCommentHandler = (event) => {
@@ -13,20 +18,50 @@ const Commentaries = ({ closeCommentaries, message, vote, setVote }) => {
     event.target.style.height = `${scHeights}px`;
   };
 
+  const addComment = () => {
+    const commentObject = {
+      comments: commentTextarea,
+    };
+    messageService.createComment(id, commentObject).then((returnedObject) => {
+      setComment(comments.concat(commentTextarea));
+      setCommentTextarea("");
+    });
+  };
+
   const handleSubmitComment = (event) => {
     if (event.which === 13 && event.shiftKey === false) {
       event.preventDefault();
 
-      setComment(comments.concat(commentTextarea));
-      setCommentTextarea("");
+      addComment();
     }
   };
+
   const handleVoteUp = () => {
-    setVote(vote + 1);
+    const upVote = {
+      vote: "up",
+    };
+    messageService
+      .updateVote(id, upVote)
+      .then((returnedObject) => {
+        setVote(returnedObject.message.votes);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const handleVoteDown = () => {
-    setVote(vote - 1);
+    const downVote = {
+      vote: "down",
+    };
+    messageService
+      .updateVote(id, downVote)
+      .then((returnedObject) => {
+        setVote(returnedObject.message.votes);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (

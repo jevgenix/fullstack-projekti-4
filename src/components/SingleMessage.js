@@ -25,7 +25,7 @@ const SingleMessage = ({ handleVoteUp, handleVoteDown, message, vote }) => {
         <br />
       </div>
       <div className="rightside">
-        <div className="message">{message}</div>
+        <div className="message">{message[0]}</div>
       </div>
     </div>
   );

@@ -1,10 +1,49 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Message from "./components/Message";
+import Form from "./components/Form";
+import messageService from "./services/posts";
 
 function App() {
   const [textarea, setTextarea] = useState("");
   const [message, setMessage] = useState([]);
+
+  useEffect(() => {
+    messageService
+      .getAll()
+      .then((initialMessages) => {
+        if (initialMessages !== "No messages found") {
+          let messages = initialMessages
+            .reverse()
+            .map((message) => [
+              message.message,
+              message._id,
+              message.votes,
+              message.comments,
+            ]);
+          setMessage(messages);
+        } else {
+          setMessage([]);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
+
+  const addPost = () => {
+    const messageObject = {
+      message: textarea,
+    };
+    messageService
+      .create(messageObject)
+      .then((returnedObject) => {
+        setMessage(message.concat(returnedObject.message));
+        console.log(console.log(`Message ${messageObject.message} added`));
+        setTextarea("");
+      })
+      .catch((error) => console.log(error));
+  };
 
   const handleTextareaChange = (event) => {
     setTextarea(event.target.value);
@@ -17,29 +56,20 @@ function App() {
     if (event.which === 13 && event.shiftKey === false) {
       event.preventDefault();
       setMessage(message.concat(textarea));
-      setTextarea("");
+      addPost();
     }
   };
 
   return (
     <div className="App">
-      <div className="wrapper">
-        <h2> Shift + Enter for line break, Enter to input message </h2>
-        <h3>Tell us something!</h3>
-        <form onKeyDown={handleSubmitForm}>
-          <textarea
-            value={textarea}
-            name="message"
-            className="textarea"
-            placeholder="Tell us something!"
-            autoComplete="off"
-            onChange={handleTextareaChange}
-          ></textarea>
-        </form>
-      </div>
+      <Form
+        handleSubmitForm={handleSubmitForm}
+        handleTextareaChange={handleTextareaChange}
+        textarea={textarea}
+      />
       <div className="messages">
-        {message.map((message, index) => (
-          <Message key={index} message={message} />
+        {message.map((message) => (
+          <Message key={message[1]} message={message} />
         ))}
       </div>
     </div>
