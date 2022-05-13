@@ -7,6 +7,7 @@ import messageService from "./services/posts";
 function App() {
   const [textarea, setTextarea] = useState("");
   const [message, setMessage] = useState([]);
+  const [userId, setUserId] = useState("");
 
   useEffect(() => {
     messageService
@@ -20,7 +21,9 @@ function App() {
               message._id,
               message.votes,
               message.comments,
+              message.userId,
             ]);
+          console.log(messages);
           setMessage(messages);
         } else {
           setMessage([]);
@@ -29,17 +32,56 @@ function App() {
       .catch((error) => {
         console.log(error);
       });
-  });
+  }, []);
+
+  // create unique userId and save it to localStorage
+  useEffect(() => {
+    const generateId = () => Math.random().toString(36).substr(2, 18);
+
+    if (JSON.parse(localStorage.length === 0)) {
+      JSON.stringify(localStorage.setItem("userId", generateId()));
+    }
+    setUserId(JSON.stringify(localStorage.getItem("userId")));
+  }, [userId]);
 
   const addPost = () => {
     const messageObject = {
       message: textarea,
+      userId: userId,
     };
+
     messageService
       .create(messageObject)
       .then((returnedObject) => {
-        setMessage(message.concat(returnedObject.message));
+        // kun teen concat, sen sijaan että lisään kaikki tiedot minä lisään vain ja ainoastaan sen viestin
         console.log(console.log(`Message ${messageObject.message} added`));
+        if (message.length === 0) {
+          setMessage([
+            [
+              returnedObject.message,
+              returnedObject._id,
+              returnedObject.votes,
+              returnedObject.comments,
+              returnedObject.userId,
+            ],
+          ]);
+          console.log(message);
+        } else {
+          setMessage(
+            message
+              .concat([
+                [
+                  returnedObject.message,
+                  returnedObject._id,
+                  returnedObject.votes,
+                  returnedObject.comments,
+                  returnedObject.userId,
+                ],
+              ])
+              .reverse()
+          );
+        }
+        console.log(message);
         setTextarea("");
       })
       .catch((error) => console.log(error));
@@ -68,8 +110,13 @@ function App() {
         textarea={textarea}
       />
       <div className="messages">
-        {message.map((message) => (
-          <Message key={message[1]} message={message} />
+        {message.map((message, index) => (
+          <Message
+            key={index}
+            setMessage={setMessage}
+            message={message}
+            userId={userId}
+          />
         ))}
       </div>
     </div>

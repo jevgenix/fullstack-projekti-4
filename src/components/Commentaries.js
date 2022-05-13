@@ -7,7 +7,6 @@ import messageService from "../services/posts";
 const Commentaries = ({ closeCommentaries, message, vote, setVote }) => {
   const commentaries = message[3].map((elem) => elem.comments);
   const id = message[1];
-
   const [comments, setComment] = useState(commentaries);
   const [commentTextarea, setCommentTextarea] = useState("");
 
@@ -31,7 +30,6 @@ const Commentaries = ({ closeCommentaries, message, vote, setVote }) => {
   const handleSubmitComment = (event) => {
     if (event.which === 13 && event.shiftKey === false) {
       event.preventDefault();
-
       addComment();
     }
   };
