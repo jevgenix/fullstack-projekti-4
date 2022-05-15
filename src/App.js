@@ -8,7 +8,8 @@ function App() {
   const [textarea, setTextarea] = useState("");
   const [message, setMessage] = useState([]);
   const [userId, setUserId] = useState("");
-  const [messageArray, setMessageArray] = useState([]);
+
+  const [testVote, setTestVote] = useState([]);
 
   useEffect(() => {
     messageService
@@ -16,7 +17,6 @@ function App() {
       .then((initialMessages) => {
         if (initialMessages !== "No messages found") {
           setMessage(initialMessages);
-          setMessageArray(initialMessages);
         } else {
           setMessage([]);
         }
@@ -47,7 +47,6 @@ function App() {
         // kun teen concat, sen sijaan että lisään kaikki tiedot minä lisään vain ja ainoastaan sen viestin
         // console.log(console.log(`Message ${messageObject.message} added`));
         setMessage(message.concat(returnedObject));
-        setMessageArray(messageArray.concat(returnedObject));
         setTextarea("");
       })
       .catch((error) => console.log(error));
@@ -83,6 +82,22 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    let array = [];
+    message
+      .slice(0)
+      .reverse()
+      .forEach((m) => {
+        var obj = {};
+        obj["id"] = m._id;
+        obj["votes"] = m.votes;
+        return array.push(obj);
+      });
+    setTestVote(array);
+  }, [message]);
+
+  //console.log(testVote);
+
   return (
     <div className="App">
       <Form
@@ -101,7 +116,8 @@ function App() {
               setMessage={setMessage}
               message={message}
               handleDeleteMessage={handleDeleteMessage}
-              messageArray={messageArray}
+              testVote={testVote}
+              setTestVote={setTestVote}
             />
           ))}
       </div>

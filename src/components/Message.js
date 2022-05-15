@@ -1,21 +1,38 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage, faClose } from "@fortawesome/free-solid-svg-icons";
 import Commentaries from "./Commentaries";
 import SingleMessage from "./SingleMessage";
 import messageService from "../services/posts";
 
-const Message = ({
-  message,
-  handleDeleteMessage,
-  setMessage,
-  messageArray,
-}) => {
+const Message = ({ message, handleDeleteMessage, setMessage, testVote }) => {
   const id = message._id;
-  console.log(messageArray);
 
-  const [vote, setVote] = useState(message.votes);
+  const [vote, setVote] = useState();
   const [openCommentaries, setOpenCommentaries] = useState(false);
+
+  useEffect(() => {
+    messageService
+      .getAll()
+      .then((initialMessages) => {
+        if (initialMessages !== "No messages found") {
+          setMessage(initialMessages);
+        } else {
+          setMessage([]);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [setMessage]);
+
+  useEffect(() => {
+    testVote.forEach((vote) => {
+      if (vote.id === id) {
+        setVote(vote.votes);
+      }
+    });
+  }, [id, testVote, setMessage]);
 
   const handleVoteUp = () => {
     const upVote = {
