@@ -219,3 +219,41 @@ textarea:is(:focus) {
   margin: 0 0 0 15px;
   cursor: pointer;
 }
+
+.input-search {
+  height: 30px;
+  width: 100px;
+  border: 2px solid #0075ff;
+  padding: 10px;
+  font-size: 16px;
+  letter-spacing: 1px;
+  outline: none;
+  border-radius: 25px;
+  transition: all 0.5s ease-in-out;
+  background-color: #ffffff25;
+  padding-right: 40px;
+  color: rgb(0, 0, 0);
+}
+.input-search::placeholder {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 20px;
+  letter-spacing: 1px;
+  font-weight: 400;
+}
+
+.btn-search:focus ~ .input-search {
+  width: 300px;
+  border-radius: 0px;
+  background-color: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
+}
+
+.input-search:focus {
+  width: 300px;
+  border-radius: 0px;
+  background-color: transparent;
+  border-bottom: 5px solid #0075ff;
+  border-left: 5px solid #0077ff;
+  transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
+}

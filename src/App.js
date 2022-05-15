@@ -1,6 +1,7 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import Message from "./components/Message";
+import SearchForm from "./components/SearchForm";
 import Form from "./components/Form";
 import messageService from "./services/posts";
 
@@ -8,6 +9,7 @@ function App() {
   const [textarea, setTextarea] = useState("");
   const [message, setMessage] = useState([]);
   const [userId, setUserId] = useState("");
+  const [searchValue, setSearchData] = useState("");
 
   const [testVote, setTestVote] = useState([]);
 
@@ -96,10 +98,16 @@ function App() {
     setTestVote(array);
   }, [message]);
 
-  //console.log(testVote);
+  const handleFormSearch = (event) => {
+    setSearchData(event.target.value);
+  };
 
   return (
     <div className="App">
+      <SearchForm
+        searchValue={searchValue}
+        handleFormSearch={handleFormSearch}
+      />
       <Form
         handleSubmitForm={handleSubmitForm}
         handleTextareaChange={handleTextareaChange}
@@ -108,6 +116,16 @@ function App() {
 
       <div className="messages">
         {message
+          .filter((message) => {
+            if (searchValue === "") {
+              return message;
+            } else if (
+              message.message.toLowerCase().includes(searchValue.toLowerCase())
+            ) {
+              return message;
+            }
+            return NaN;
+          })
           .slice(0)
           .reverse()
           .map((message, index) => (
