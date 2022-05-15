@@ -31,11 +31,6 @@ const createComment = (id, commentObject) => {
   return request.then((response) => response.data);
 };
 
-//const update = (id, messageObject) => {
-//  const request = axios.put(`${baseUrl}/${id}`, messageObject);
-//  return request.then((response) => response.data);
-//};
-
 const exportedObject = { getAll, create, updateVote, remove, createComment };
 
 export default exportedObject;

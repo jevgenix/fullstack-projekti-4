@@ -1,6 +1,6 @@
 import "./App.css";
 import { useState, useEffect } from "react";
-import Message from "./components/Message";
+import Content from "./components/Content";
 import SearchForm from "./components/SearchForm";
 import Form from "./components/Form";
 import messageService from "./services/posts";
@@ -46,8 +46,6 @@ function App() {
     messageService
       .create(messageObject)
       .then((returnedObject) => {
-        // kun teen concat, sen sijaan että lisään kaikki tiedot minä lisään vain ja ainoastaan sen viestin
-        // console.log(console.log(`Message ${messageObject.message} added`));
         setMessage(message.concat(returnedObject));
         setTextarea("");
       })
@@ -76,7 +74,6 @@ function App() {
         .remove(id)
         .then(() => {
           setMessage(message.filter((m) => m._id !== id));
-          console.log("removed");
         })
         .catch((err) => {
           console.log(err);
@@ -113,32 +110,13 @@ function App() {
         handleTextareaChange={handleTextareaChange}
         textarea={textarea}
       />
-
-      <div className="messages">
-        {message
-          .filter((message) => {
-            if (searchValue === "") {
-              return message;
-            } else if (
-              message.message.toLowerCase().includes(searchValue.toLowerCase())
-            ) {
-              return message;
-            }
-            return NaN;
-          })
-          .slice(0)
-          .reverse()
-          .map((message, index) => (
-            <Message
-              key={index}
-              setMessage={setMessage}
-              message={message}
-              handleDeleteMessage={handleDeleteMessage}
-              testVote={testVote}
-              setTestVote={setTestVote}
-            />
-          ))}
-      </div>
+      <Content
+        message={message}
+        setMessage={setMessage}
+        handleDeleteMessage={handleDeleteMessage}
+        searchValue={searchValue}
+        testVote={testVote}
+      />
     </div>
   );
 }

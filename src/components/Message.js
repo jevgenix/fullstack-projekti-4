@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMessage, faClose } from "@fortawesome/free-solid-svg-icons";
+import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import Commentaries from "./Commentaries";
 import SingleMessage from "./SingleMessage";
+import DeleteButton from "./DeleteButton";
 import messageService from "../services/posts";
 
 const Message = ({ message, handleDeleteMessage, setMessage, testVote }) => {
@@ -42,7 +43,6 @@ const Message = ({ message, handleDeleteMessage, setMessage, testVote }) => {
       .updateVote(id, upVote)
       .then((returnedObject) => {
         setVote(returnedObject.message.votes);
-        console.log(returnedObject.message.votes);
       })
       .catch((error) => {
         console.log(error);
@@ -56,7 +56,6 @@ const Message = ({ message, handleDeleteMessage, setMessage, testVote }) => {
     messageService
       .updateVote(id, downVote)
       .then((returnedObject) => {
-        console.log(returnedObject.message.votes);
         setVote(returnedObject.message.votes);
       })
       .catch((error) => {
@@ -68,24 +67,13 @@ const Message = ({ message, handleDeleteMessage, setMessage, testVote }) => {
     setOpenCommentaries(true);
   };
 
-  //console.log(message.userId);
-  const DeleteButton = () => {
-    if (JSON.stringify(localStorage.getItem("userId")) === message.userId) {
-      return (
-        <FontAwesomeIcon
-          className="delete"
-          onClick={() => handleDeleteMessage(id)}
-          icon={faClose}
-        />
-      );
-    } else {
-      return null;
-    }
-  };
-
   return (
     <div className="commentary_border">
-      <DeleteButton />
+      <DeleteButton
+        message={message}
+        handleDeleteMessage={handleDeleteMessage}
+        id={id}
+      />
       <SingleMessage
         message={message}
         handleVoteUp={handleVoteUp}
