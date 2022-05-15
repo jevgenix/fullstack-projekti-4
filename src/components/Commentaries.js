@@ -4,9 +4,15 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 import SingleMessage from "./SingleMessage";
 import messageService from "../services/posts";
 
-const Commentaries = ({ closeCommentaries, message, vote, setVote }) => {
-  const commentaries = message[3].map((elem) => elem.comments);
-  const id = message[1];
+const Commentaries = ({
+  closeCommentaries,
+  message,
+  vote,
+  setVote,
+  setMessage,
+}) => {
+  const id = message._id;
+  const commentaries = message.comments.map((element) => element.comments);
   const [comments, setComment] = useState(commentaries);
   const [commentTextarea, setCommentTextarea] = useState("");
 
@@ -21,16 +27,34 @@ const Commentaries = ({ closeCommentaries, message, vote, setVote }) => {
     const commentObject = {
       comments: commentTextarea,
     };
-    messageService.createComment(id, commentObject).then((returnedObject) => {
-      setComment(comments.concat(commentTextarea));
-      setCommentTextarea("");
-    });
+    messageService
+      .createComment(id, commentObject)
+      .then(() => {
+        setComment(comments.concat(commentTextarea));
+        console.log(comments);
+        setCommentTextarea("");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleSubmitComment = (event) => {
     if (event.which === 13 && event.shiftKey === false) {
       event.preventDefault();
       addComment();
+      messageService
+        .getAll()
+        .then((initialMessages) => {
+          if (initialMessages !== "No messages found") {
+            setMessage(initialMessages);
+          } else {
+            setMessage([]);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
 
@@ -68,7 +92,21 @@ const Commentaries = ({ closeCommentaries, message, vote, setVote }) => {
         <header className="modalHeader">
           <FontAwesomeIcon
             className="close-icon"
-            onClick={() => closeCommentaries(false)}
+            onClick={() => {
+              messageService
+                .getAll()
+                .then((initialMessages) => {
+                  if (initialMessages !== "No messages found") {
+                    setMessage(initialMessages);
+                  } else {
+                    setMessage([]);
+                  }
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+              closeCommentaries(false);
+            }}
             icon={faClose}
           />
           <h3>Comments</h3>

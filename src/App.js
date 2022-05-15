@@ -8,23 +8,15 @@ function App() {
   const [textarea, setTextarea] = useState("");
   const [message, setMessage] = useState([]);
   const [userId, setUserId] = useState("");
+  const [messageArray, setMessageArray] = useState([]);
 
   useEffect(() => {
     messageService
       .getAll()
       .then((initialMessages) => {
         if (initialMessages !== "No messages found") {
-          let messages = initialMessages
-            .reverse()
-            .map((message) => [
-              message.message,
-              message._id,
-              message.votes,
-              message.comments,
-              message.userId,
-            ]);
-          console.log(messages);
-          setMessage(messages);
+          setMessage(initialMessages);
+          setMessageArray(initialMessages);
         } else {
           setMessage([]);
         }
@@ -37,7 +29,6 @@ function App() {
   // create unique userId and save it to localStorage
   useEffect(() => {
     const generateId = () => Math.random().toString(36).substr(2, 18);
-
     if (JSON.parse(localStorage.length === 0)) {
       JSON.stringify(localStorage.setItem("userId", generateId()));
     }
@@ -54,34 +45,9 @@ function App() {
       .create(messageObject)
       .then((returnedObject) => {
         // kun teen concat, sen sijaan että lisään kaikki tiedot minä lisään vain ja ainoastaan sen viestin
-        console.log(console.log(`Message ${messageObject.message} added`));
-        if (message.length === 0) {
-          setMessage([
-            [
-              returnedObject.message,
-              returnedObject._id,
-              returnedObject.votes,
-              returnedObject.comments,
-              returnedObject.userId,
-            ],
-          ]);
-          console.log(message);
-        } else {
-          setMessage(
-            message
-              .concat([
-                [
-                  returnedObject.message,
-                  returnedObject._id,
-                  returnedObject.votes,
-                  returnedObject.comments,
-                  returnedObject.userId,
-                ],
-              ])
-              .reverse()
-          );
-        }
-        console.log(message);
+        // console.log(console.log(`Message ${messageObject.message} added`));
+        setMessage(message.concat(returnedObject));
+        setMessageArray(messageArray.concat(returnedObject));
         setTextarea("");
       })
       .catch((error) => console.log(error));
@@ -95,10 +61,25 @@ function App() {
   };
 
   const handleSubmitForm = (event) => {
-    if (event.which === 13 && event.shiftKey === false) {
-      event.preventDefault();
-      setMessage(message.concat(textarea));
-      addPost();
+    if (textarea.length > 2) {
+      if (event.which === 13 && event.shiftKey === false) {
+        event.preventDefault();
+        addPost();
+      }
+    }
+  };
+
+  const handleDeleteMessage = (id) => {
+    if (window.confirm(`You sure want to delete this post?`)) {
+      messageService
+        .remove(id)
+        .then(() => {
+          setMessage(message.filter((m) => m._id !== id));
+          console.log("removed");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
 
@@ -109,15 +90,20 @@ function App() {
         handleTextareaChange={handleTextareaChange}
         textarea={textarea}
       />
+
       <div className="messages">
-        {message.map((message, index) => (
-          <Message
-            key={index}
-            setMessage={setMessage}
-            message={message}
-            userId={userId}
-          />
-        ))}
+        {message
+          .slice(0)
+          .reverse()
+          .map((message, index) => (
+            <Message
+              key={index}
+              setMessage={setMessage}
+              message={message}
+              handleDeleteMessage={handleDeleteMessage}
+              messageArray={messageArray}
+            />
+          ))}
       </div>
     </div>
   );

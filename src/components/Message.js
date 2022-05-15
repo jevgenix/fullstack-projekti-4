@@ -5,11 +5,16 @@ import Commentaries from "./Commentaries";
 import SingleMessage from "./SingleMessage";
 import messageService from "../services/posts";
 
-const Message = ({ message, userId, setMessage }) => {
-  const v = message[2];
-  const [vote, setVote] = useState(v);
-  const id = message[1];
-  console.log(message[2]);
+const Message = ({
+  message,
+  handleDeleteMessage,
+  setMessage,
+  messageArray,
+}) => {
+  const id = message._id;
+  console.log(messageArray);
+
+  const [vote, setVote] = useState(message.votes);
   const [openCommentaries, setOpenCommentaries] = useState(false);
 
   const handleVoteUp = () => {
@@ -34,6 +39,7 @@ const Message = ({ message, userId, setMessage }) => {
     messageService
       .updateVote(id, downVote)
       .then((returnedObject) => {
+        console.log(returnedObject.message.votes);
         setVote(returnedObject.message.votes);
       })
       .catch((error) => {
@@ -45,47 +51,13 @@ const Message = ({ message, userId, setMessage }) => {
     setOpenCommentaries(true);
   };
 
-  const handleDeleteMessage = () => {
-    if (window.confirm(`You sure want to delete this post?`)) {
-      messageService
-        .remove(id)
-        .then(() => {
-          messageService
-            .getAll()
-            .then((initialMessages) => {
-              if (initialMessages !== "No messages found") {
-                let messages = initialMessages
-                  .reverse()
-                  .map((message) => [
-                    message.message,
-                    message._id,
-                    message.votes,
-                    message.comments,
-                    message.userId,
-                  ]);
-                setMessage(messages);
-              } else {
-                setMessage([]);
-              }
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-
-          console.log("removed");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  };
-
+  //console.log(message.userId);
   const DeleteButton = () => {
-    if (JSON.stringify(localStorage.getItem("userId")) === userId) {
+    if (JSON.stringify(localStorage.getItem("userId")) === message.userId) {
       return (
         <FontAwesomeIcon
           className="delete"
-          onClick={handleDeleteMessage}
+          onClick={() => handleDeleteMessage(id)}
           icon={faClose}
         />
       );
@@ -93,8 +65,6 @@ const Message = ({ message, userId, setMessage }) => {
       return null;
     }
   };
-
-  //console.log(JSON.stringify(localStorage.getItem("userId")) === userId);
 
   return (
     <div className="commentary_border">
@@ -112,6 +82,7 @@ const Message = ({ message, userId, setMessage }) => {
           vote={vote}
           setVote={setVote}
           message={message}
+          setMessage={setMessage}
         />
       )}
       <FontAwesomeIcon
