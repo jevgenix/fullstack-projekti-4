@@ -1,10 +1,10 @@
 import axios from "axios";
 
 // online REST API
-//const baseUrl = "https://rest-api-project-3.herokuapp.com/api/";
+const baseUrl = "https://rest-api-project-3.herokuapp.com/api/";
 
 // offline REST API
-const baseUrl = "http://localhost:5000/api";
+//const baseUrl = "http://localhost:5000/api";
 
 const getAll = () => {
   const request = axios.get(`${baseUrl}/getall`);
