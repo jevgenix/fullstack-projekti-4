@@ -6,6 +6,6 @@
 
 ### The application also has a search input, that allows the user to find posts by keywords.
 
-### If the user wants to create post, the minimum text length of post is 3 by default, so if textarea contains less characters then required it will not allow user to create the post. Also small things like automotive textarea size adjusting and "enter" to submit and "CTRL + Enter" for line break have also added to this project as a part of feature set.
+### If the user wants to create post, the minimum text length of post is 3 by default, so if textarea contains less characters then required it will not allow user to create the post. Also small things like automased textarea size adjusting and "enter" to submit or "CTRL + Enter" for line break have also been added to this project as part of feature set.
 
-### This app is not yet complete and it is missing some key details. For example there are no possibility to edit created post (not has Twitter :D) & the user is able to upvote and downvote same post infinite times.
+### This app is not yet complete and it is missing some key details. For example there are no possibility to edit created post (nor has Twitter :D) & the user is able to upvote and downvote same post infinite times.
